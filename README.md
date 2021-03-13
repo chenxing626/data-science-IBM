@@ -981,3 +981,1115 @@ SELECT "Id", "Name_of_Dog",
     FROM DOGS
     WHERE "Name_of_Dog"='Huggy'
 ```
+
+
+## Data Analysis with Python -- Week 1
+
+Importance of Data Analysis: data is everywhere; data analysis helps us answer questions from data; discovering useful information; answering questions; predicting future or the unknown
+
+*Quiz*
+
+1. What does .csv file stand for? -- **common separated values**
+2. Each column contains a -- **attribute or feature**
+
+Python Packages for Data Science includes
+* Scientific computing libraries in Python: Pandas / Numpy / Scipy
+* Visualization libraries in Python: Matplotlib / Seaborn
+* Algorithmic libraries in Python: Scikit-learn / Statsmodels
+
+*Quiz*
+
+1. What is a Python Library? -- **a collection of functions and methods that allows you to perform lots of actions without writing your code**
+2. Scikit-learn is used for -- **statistical modelling including regression and classification**
+
+Data acquisition is a process of loading and reading data into notebook from various sources. Two important factors to consider in importing data using Python: format and file path.
+
+```df.head(n)``` to show the first n rows of dataframe; ```df.tail(n)``` to show the bottom n rows of dataframe.
+
+*Quiz*
+
+1. What is the file path? -- **the file path tells us where the data is stored**
+2. What task does the following lines of code perform? ```path='xxx'; df.to_csv(path)``` -- **exports your Pandas dataframe to a new .csv file, in the location specified by the variable path**
+
+There are some basic insights from the data once you load the data:
+* understand your data before you begin any analysis
+* check data types 
+  * potential info and type mismatch / compatibility with Python method 
+  * ```df.dtypes```
+* check data distribution 
+  * ```df.describe()``` returns a statistical summary 
+  * ```df.info()``` provides a concise summary of the dataframe
+* locate potential issues with the data
+
+*Quiz*
+
+1. What is the name of what we want to predict? -- **target**
+2. What does .csv stand for? -- **comma separated values**
+3. What library is primarily used for data analysis? -- **pandas**
+4. Select the libraries you will use for this course? -- **matplotlib; pandas; scikit-learn**
+5. What is the command to display the first five rows of a dataframe df? -- ```df.head()```
+6. What task does the following command perform? ```df.to_csv("A.csv")``` -- **save the dataframe df to a .csv file called "A.csv"**
+7. What attribute or method will give you the data type of each column? -- **dtypes**
+8. How would you generate descriptive statistics for all the columns for the dataframe df? -- ```df.describe(include='all')```
+
+
+## Data Analysis with Python -- Week 2
+
+Data pre-processing, AKA data cleaning or data wrangling, is the process of converting or mapping data from the initial raw form into another format, in order to prepare the data for further analysis.
+
+**Dealing with Missing Values in Python**
+
+Missing values occur when no data value is stored for a variable (feature) in an observation. Missing values could be represented as "?", "N/A", 0 or just a blank cell.
+
+1. Check the data collection source
+2. Drop the missing values (variable / data entry)
+3. Replace the missing values (with average / by frequency (mode) / based on functions)
+4. Leave it as missing data
+
+* Use ```dataframes.dropna(inplace=True)``` to drop missing values;
+* Use ```dataframes.replace(miss_val, new_val)``` to replace missing values;
+
+*Quiz*
+
+1. How would you access the column "symboling" from the dataframe df? -- ```df["symboling"]```
+2. How would you replace the missing values in the column "normalized-losses" with the mean of that column? -- ```mean=df["normalized-losses"].mean(); df["normalized-losses"].replace(np.nan, mean)```
+3. What is the correct symbol for missing data? -- **nan**
+
+**Data Formatting in Python**
+
+Data formatting means bringing data into a common standard of expression that allows users to make meaningful comparison. Data formatting ensures the data is consistent and easily understandable. 
+
+* non-formatted: confusing / hard to aggregate / hard to compare
+* formatted: more clear / easy to aggregate / easy to compare
+
+```
+df["city-mpg"] = 235 / df["city-mpg"]
+df.rename(columns={"city-mpg": "city-L/100km"}, inplace=True)
+```
+
+Sometimes the wrong data type is assigned to a feature. There are many data types in pandas: objects / int64 / float64.
+* To identify data types: ```dataframe.dtypes()```
+* To convert data types: ```dataframe.astype()```
+
+*Quiz*
+
+1. How would you multiply each element in the column df["a"] by 2 and assign it back to the column df["a"]? -- ```df["a"] = 2*df["a"]```
+2. How would you rename the column "city_mpg" to "city-L/100km"? -- ```df.rename(columns={"city_mpg": "city-L/100km"}, inplace=True)```
+
+**Data Normalization in Python**
+
+Data normalization refers to uniforming the features value with different range. By making the ranges consistent between variables, normalization enables a fair comparison between the different features, making sure they have the same impact.
+
+There are several approaches for normalization:
+1. feature scaling ([0,1]) ```df["len"] = df["len"]/df["len"].max()```
+2. min-max ([0,1]) ```df["len"] = (df["len"]-df["len"].min()) / (df["len"].max()-df["len"].min())```
+3. z-score (hover around 0) ```df["len"] = (df["len"]-df["len"].mean()) / df["len"].std()```
+
+*Quiz*
+
+1. What is the maximum value for feature scaling? -- 1
+2. Consider the column "length", select the correct code for simple feature scaling. -- ```df["length"] = df["length"]/df["length"].max()```
+
+**Binning in Python**
+
+Binning is a method of data pre-processing when you group values together into bins. We use binning to convert numeric variables into categorical variables for improved accuracy in the predictive models. In addition, we use data binning to group a set of numerical values into a smaller number of bins to have a better understanding of the data distribution.
+
+```
+bins = np.linspace(min(df["price"]), max(df["price"]), 4)
+group_names = ["low", "medium", "high"]
+df["price_binned"] = pd.cut(df["price"], bins, labels=group_names, include_lowest=True)
+```
+
+**Turning categorical variables into quantitative variables in Python**
+
+Most statistical modes cannot take in objects or strings as input and for model training only take the numbers as inputs. We encode the values by adding new features corresponding to each unique element in the original feature we would like to encode.
+
+categorical -> numeric: add dummy variables for each unique category / assign 0 or 1 in each category (**ONE-HOT ENCODING**)
+
+Use ```pandas.get_dummies()``` method to convert categorical variables to dummy variables (0 / 1). E.g. ```pd.get_dummies(df['fuel'])```
+
+*Quiz*
+
+1. Why do we convert values of categorical values into numerical values? -- **most statistical models cannot take in objects or strings as inputs**
+2. What is the correct line of code to perform one-hot encoding on the column "fuel"? -- ```pd.get_dummies(df['fuel'])```
+
+*Quiz*
+
+1. What task does the following line of code perform? ```df['peak-rpm'].repalce(np.nan, 5, inplace=True)``` -- **replace the not a number values with 5 in the column 'peak-rpm'**
+2. What task do the following lines of code perform? ```avg=df['bore'].mean(axis=0); df['bore'].replace(np.nan, avg, inplace=True)``` -- **calculate the mean value for the 'bore' column and replace all the NaN values of that column by the mean value**
+3. Consider the dataframe df, convert the column df['city-mpg'] to df['city-L/100km'] by dividing 235 by each element in the column 'city-mpg'. -- ```df['city-L/100km'] = 235 / df['city-mpg']```
+4. What data type is the following set of numbers? 666, 1.1, 232, 23.12 -- **float**
+5. The following code is an example of ```(df['len']-df['len'].mean()) / df['len'].std()``` -- **z-score**
+
+
+## Data Analysis with Python -- Week 3
+
+Exploratory data analysis (EDA) is a preliminary step in data analysis to 1) summarize main characteristics of the data; 2) gain better understanding of the dataset; 3) uncover relationships between different variables; 4) extract important variables for the problem we are trying to solve.
+
+Descriptive statistics describe basic features of data and give short summaries about the sample and measures of the data. 
+* summarize statistics using pandas describe() method ```df.describe()```
+  * NaN values will be excluded if the method describe() is applied to a dataframe with NaN values
+* summarize the categorical data by using the method ```value_counts()```
+* visualize numeric data using box plots (visualization of various distributions of the data)
+  * median / upper quartile / lower quartile / outlier
+* visualize the relationship between two variables as each observation represented as a point
+  * predictor / independent variables on x-axis
+  * target / dependent variables on y-axis
+
+*Quiz*
+
+1. Select the appropriate table for the following line of code ```df = pd.DataFrame({'A': ["a", "b", "c", "a", "a"]}); df['A'].value_counts()``` -- **a:3 b:1 c:1**
+2. Consider the following scatter plot, what kind of relationship do the two variables have? -- **positive linear relationship**
+
+Grouping data can be done using ```dataframe.groupby()``` method
+* can be applied on categorical variables
+* grouping data into categories
+* grouping based on single or multiple variables
+
+```
+df_test = df['drive-wheels', 'body-style', 'price']
+df_grp = df_test.groupby(['drive-wheels', 'body-style'], as_index=False).mean()
+```
+
+Pandas method ```pivot()```: one variable displayed along the columns and the other variable display along the rows.
+
+```
+df_pivot = df_grp.pivot(index='drive-wheels', columns='body-style')
+```
+
+**Heatmap** is to plot target variable over multiple variables.
+
+```
+plt.pcolor(df_pivot, cmap='RdBBu')
+plt.colorbar()
+plt.show()
+```
+
+*Quiz*
+
+1. The following is the output from applying the groupby method. How many different groups are there? -- **3**
+
+**Correlation** is a statistical metric for measuring to what extent different variables are interdependent. E.g. lung cancer -> smoking; rain -> umberlla. Correlation does not imply causation. 
+
+*Quiz*
+
+1. What is Correlation? -- **measures to what extent different variables are interdepedent**
+
+**Pearson Correlation**: to measure the strength of the correlation between two features
+* correlation coefficient
+  * close to +1: large positive relationship
+  * close to -1: large negative relationship
+  * close to 0: no relationship
+* p-value
+  * < 0.001 strong certainty in the result
+  * < 0.05 moderate certainty in the result
+  * < 0.1 weak certainty in the result
+  * \> 0.1 no certainty in the result
+* *strong correlation*
+  * correlation coefficient close to +1 or -1
+  * p-value less than 0.001
+
+Taking all variables into account, we can now create a heatmap that indicates the correlation between each of the variables with one another. This correlation heatmap gives us a good overview of how the different variables are related to one another and, most importantly, how these variables are related to price.
+
+**Analysis of Variance (ANOVA)**: to find the correlation between different groups of a categorical variable
+* F-test score: variation between sample group means divided by variation within sample group
+  * small F implies poor correltaion between variale categories and target variable
+  * large F implies strong correlation between variable categories and target variable
+* p-value: confidence degree (whether the obtained result is statistically significant)
+
+For instance, ANOVA between "Honda" and "Subaru":
+```
+df_anova = df[['make', 'price']]
+grouped_anova = df_anova.groupby(['make'])
+anova_results_l = stats.f_oneway(grouped_anova.get_group('honda')['price'], grouped_anova.get_group('subaru')['price'])
+```
+```
+ANOVA results: F=0.19744031275, p=F_onewayResult(statistic=0.1974430127), pvalue=0.660947824
+```
+The prices between Honda's and Subaru are **not** significantly different since the F-score is veryl small (0.197). However, there is a strong correlation between a categorical variable and other variables if the ANOVA test gives us **a large F-test score** and **a small p-value**.
+
+*Quiz*
+
+1. What task does the method value_counts perform? -- **return counts of unique values**
+2. What does the vertical axis in a scatter plot represent? -- **dependent** 
+3. What is the largest possible element resulting in the operation df.corr()? -- **1**
+4. If the p-value of the Pearson Correlation is 1, then -- **the variables are not correlated**
+5. Consider the dataframe df, what method provides the summary statistics? -- **df.describe()**
+6. What is the minimum possible value of Pearson's Correlation? -- **-1**
+7. What is the Pearson Correlation between variables X and Y if X = Y? -- **1**
+
+
+## Data Analysis with Python -- Week 4
+
+A model can be thought of as a mathematical equation used to predict a value given one or more other values. Usually the more relevant data you have the more accuracte your model is.
+
+* Linear regression refers to one independent variable to make a prediction
+* Multiple linear regression refers to multiple independent variables to make a prediction
+
+**Simple Linear Regression (LR)**
+
+1. the predictor (independent) variable - $x$
+2. the target (dependent) variable -$y$
+
+$y = b_0 + b_1 x$  
+where $b_0$ is the intercept and $b_1$ is the slope
+
+**Multiple Linear Regression (MLR)**
+
+is used to explain the relationship between:
+* one continuous target (Y) variable
+* two or more predictor (X) variables
+
+$Y = b_0 + b_1x_1 + b_2x_2 + b_3x_3 + ...$  
+where $b_0$ is the intercept (X=0) and $b_1$ is the *coefficient* or *parameter* of $x_1$ and $b_2$ is the *coefficient* or *parameter* of $x_2$ and so on.
+
+*Quiz*
+
+1. Consider the following lines of code, what is the name of the column that contains the target values? ```Y = df['price']``` -- **'price'**
+2. Consider the following equation, what is the parameter $b_0$? $y = b_0 + b_1x$ -- **the intercept**
+
+**Regression plot** gives us a good estimate of 1) relationship between two variables; 2) the strength of the correlation; 3) the direction of the relationship (positive or negative)
+
+**Regression plot** shows us a combination of 
+* the scatterplot: where each point represents a different y
+* the fitted linear regression line y'
+
+```
+import seaborn as sns
+sns.regplot(x='highway-mpg', y='price', data=df)
+plt.ylim(0,)
+```
+
+![](images/residual_plot.png)
+
+Attention on the spread of the residuals: Randomly spread out around x-axis then a linear model is appropriate.
+
+**Distribution plot** shows us a combination of 
+* the fitted values that result from the model
+* the actual values (groundtruth)
+
+```
+import seaborn as sns
+ax1 = sns.distplot(df['price'], hist=False, color='r', label='Actual Value')
+sns.distplot(Yhat, hist=False, color='r', label='Fitted Value', ax=ax1)
+```
+
+*Quiz*
+
+1. Consider the following Residual Plot, is our linear model correct? -- **yes (randomly spread out around x-axis)**
+2. Select the distribution plot that demonstrates the best-predicted values compared to actual values -- **b**
+
+**Polynomial regression** is a special case of the general linear regression model. It is useful for describing curvilinear relationships.
+* quadratic -- 2nd order
+* cubic -- 3rd order
+* higher order
+
+```
+f = np.polyfit(x, y, 3)
+p = np.polydl(f)
+print(p)
+```
+
+We can also have multi-dimensional polynomial linear regression  
+$Y = b_0 + b_1X_1 + b_2X_2 + b_3X_1X_2 + b_4X_1^2 + b_5X_2^2$
+
+```
+from sklearn.preprocessing import PolynomialFeatures
+pr = PolynomialFeatures(degree=2)
+x_polly = pr.fit_transform(x[['horsepower', 'curb-weight']], include_bias=False)
+```
+
+As the dimension of the data gets larger, we may want to normalize multiple features.
+
+**Pipeline** sequentially perform a series of transformations and the last step carries out a prediction. A pipeline typically contains:
+1. normalization
+2. polynomial transform
+3. linear regression
+
+```
+Input = [('scale', StandardScaler()), ('polynomial', PolynomialFeatures(degree=2)), ('mode', LinearRegression())]
+pipe = Pipeline(Input) # a pipeline object
+pipe.train(X['horsepower', 'curb-weight', 'engine-size', 'highway-mpg'], y)
+yhat = pipe.predict(X[['horsepower', 'curb-weight', 'engine-size', 'highway-mpg']])
+```
+
+*Quiz*
+
+1. What functions are used to generate Polynomial Regression with more than one dimension? -- ```pr = PolynomialFeatures(degree=2); pr.fit_transform([1,2], include_bias=False```
+2. Select the line of code that imports the module required for polynomial features. -- ```from sklearn.preprocessing import PolynomialFeatures```
+
+The measures that we use for in-sample evaluation are a way to numerically determine how good the model fits on our data. Two important measures are: **Mean Squared Error(MSE)** and **R-squared (or coefficient of determination)**.
+* To measure the MSE, we find the difference between the actual values and the predicted values then square it.
+```
+from sklearn.metrics import mean_squared_error
+mean_squared_error(Y, Yhat)
+```
+* R-squared is a measure to determine how close the data is to the fitted regression line. $R^2 = (1 - \frac{MSE_{regression}}{MSE_{dataaverage}})$ So $R^2$ is in range [0,1]
+```
+lm = LinearRegression()
+lm.fit(X, Y)
+lm.score(X, y)
+```
+
+*Quiz*
+
+1. Consider the following lines of code, what value does the variable ```out``` contain? ```lm = LinearRegression(); lm.fit(X, Y); out=lm.score(X, y)``` -- **the coefficient of determination or $R^2$**
+2. Select the correct function to calculate the mean squared error between yhat and y? -- ```from sklearn.metrics import mean_squared_error; mean_squared_error(y, yhat)```
+
+Decision Making: determining a good model fit
+* do the predicted values make sense?
+* visualization (regression plot / residual plot)
+* numerical measures for evaluation (MSE, $R^2$)
+* comparing models
+
+*Quiz*
+
+1. If the predicted function is $y = b_0 + b_1x_1 + b_2x_2 + b_3x_3 + b_4x_4$. The method is: -- **multiple linear regression**
+2. What steps do the following lines of code perform? ```Input=[('scale',StandardScaler()),('model',LinearRegression())]; pipe=Pipeline(Input); pipe.fit(Z,y); ypipe=pipe.predict(Z)``` -- **standardize the data, then perform a prediction using a linear regression model using the features z and targets y**
+3. We create a polynomial feature as follows "PolynomialFeatures(degree=2)", what is the order of the polynomial? -- **2**
+4. What value of $R^2$ (coefficient of determination) indicates your model performs best? -- **1**
+5. The larger the mean squared error, the better your model has performed. -- **False**
+6. Consider the following equation: $y = b_0 + b_1x$. The value y is what? -- **the target or dependent variable**
+
+
+## Data Analysis with Python -- Week 5
+
+In-sample evaluation tells us how well our model will fit the data used to train it. It does not tell us how well the trained model can be used to predict new data.
+* In-sample data or **training data**
+* Out-of-sample evaluation or **test set**
+
+Build and train the model with a **training set**, and use **test set** to assess the performance of the predictive model.
+
+```
+X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, test_size=0.3, random_state=0)
+```
+
+**Cross Validation** is the most common out-of-sample evaluation metrics, and it enables more effective use of data (each observaion is used for both training and testing).
+
+```
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(lr, X_data, y_data, cv=10)
+np.mean(scores)
+```
+
+```cross_val_predict()``` returns the prediction that was obtained for each element when it was in the test set.
+
+```
+from sklearn.model_selection import cross_val_predict
+yhat = cross_val_predict(lr2e, X_data, y_data, cv=10)
+```
+
+*Quiz*
+
+1. What is the correct use of the "train_test_split" function such that 90% of the data samples will be utilized for training, the parameter "random_state" is set to zero, and the input variables for the features and targets are X_data, y_data respectively? -- ```train_test_split(X_data, y_data, test_size=0.1, random_state=0)```
+2. What is the problem with the in-sample evaluation? -- **it does not tell us how the trained model can be used to predict new data**
+
+How to do the model selection
+* Underfitting, where the model is too simpe to fit the data.
+* Overfitting, where the model is too flexible and fits the noise rather than function.
+
+Noise term is one reason for the error (becuase the rror is random, we cannot predict it), and it is also reffered to as **irreducible error**.
+
+*Quiz*
+
+1. What model should you select? -- **b (not underfitting or overfitting)**
+2. The following is an example of? -- **underfitting**
+
+**Ridge Regression** is useful to prevent overfitting. Ridge regression controls the magnitude of these polynomial coefficients by introducing the parameter alpha. Alpha is a parameter, or **hyperparameter**, that we select before ftting or training the model.
+
+```
+from sklearn.linear_model import Ridge
+RidgeModel = Ridge(alpha=0.1)
+RidgeModel.fit(X, y)
+yhat = RidgeModel.predict(X)
+```
+
+*Quiz*
+
+1. Select the model with the optmimum value of alpha. -- **b**
+2. The following models were all trained on the same data, select the model with the heighest value for alpha. -- **c**
+
+**Grid Search** allows us to scan through multiple free parameters with few lines of code. Scikit-learn has a means of automatically iterating over these hyperparameters using cross-validation called **Grid Search**.
+
+We use the validation data to pick the best hyperparameters.
+
+```
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import GridSearchCV
+
+parameters1 = [{'alpha': [0.001, 0.1, 1.0, 100], 'normalize': [True, False]}]
+RR = Ridge()
+Grid1 = GridSearchCV(RR, parameters1, cv=10)
+Grid1.fit(X_data[['horsepower', 'curb-weight', 'engine-size', 'highwat-mpg']], y_data)
+Grid1.best_estimator_
+scores = Grid1.cv_results_
+scores['mean_test_score]
+```
+
+*Quiz*
+
+1. What is the correct use of the "train_test_split" function such that 40% of the data samples will be utilized for testing, the parameter "random_state" is set to zero, and the input variables for the features and targets are X_data, y_data respectively? -- ```train_test_split(X_data, y_data, test_size=0.4, random_state=0)```
+2. What is the correct use of the "train_test_split" function such that 40 samples will be utilized for testing, the parameter "random_state" is set to zero, and the input variables for the features and targets are X_data, y_data respectively? -- ```train_test_split(X_data, y_data, test_size=40, random_state=0)```
+3. What is the code to create a ridge regression object RR with an alpha term equal to 10? -- ```RR = Ridge(alpha=10)```
+4. What dictionary value would we use to perform a grid search to determine if normalization should be used and for testing the following values of alpha 1, 10, 100? -- ```[{'alpha': [1,10,100], 'normalize':[True,False]}]```
+5. You have a linear model: the average R^2 value on your training data is 0.5, you perform a 100th order polynomial transform on your data then use these values to train another model. After this step, your average R^2 is 0.99, which of the following comments is correct? -- **the results on your training data is not the best indicators of how your model performs; you should use your test data to get a better idea**
+6. The following is an example of what? -- **overfitting**
+7. The following is an example of what? -- **underfitting**
+
+
+## Data Visualization with Python -- Week 1
+
+Data visualization is a way to show a complex data in a form that is graphical and easy to understand. But why?
+* for exploratory data analysis
+* communicate data clearly
+* share unbiased representation of data
+* use them to support recommendations to different stakeholders
+
+When creating a visual, always remember these best practices:
+1. less is more effective
+2. less is more attractive
+3. less is more impactive
+
+Matplotlib Architecture has three main layers: 1) **Backend Layer**; 2) **Artist Layer**; 3) **Scripting Layer**.
+
+**Backend layer** has three built-in abstract interface classes:
+1. FigureCanvas: ```matplotlib.backend_bases.FigureCanvas```
+    * encompasses the area onto which the figure is drawn
+2. Renderer: ```matplotlib.backend_bases.Renderer```
+    * knows how to draw on the FigureCanvas
+3. Event: ```matplotlib.backend_bases.Event```
+    * handles user inputs such as keyboard strokes and mouse clicks
+
+**Artist layer** is comprised of one main object -- Artist: knows how to use the Renderer to draw on the canvas. Title, lines, tick labels, and images, all correspond to individual Artist instances. Two types of Artist objects:
+1. primitive: Line2D, Rectangle, Circle, and Text
+2. composite: Axis, Tick, Axes, and Figure  
+(each compositive artist may contain other composite artists as well as primitive artists)
+
+**Scripting layer** is comprised mainly of pyplot, a scripting interface that is lighter than the Artist layer.
+
+```%matplotlib inline```  
+A magic function starts with % in matploblib, and to enforce plots to be rendered within the browser, you pass it inline as the backend.
+
+A **line plot** is a type of plot which displays information as a series of data points called 'markers' connected by straight line segments.
+
+![](images/VISUAL-01-LINE-PLOT.png)
+
+*Quiz*
+
+1. Data visualization is used to explore a given dataset and perform data analytics and build predictive models. -- **False**
+2. Matplotlib was created by John Hunter, an American neurobiologist, and was originally developed as an EEG/ECoG visualization tool. -- **True**
+3. The Backend, Artist, and Scripting Layers are three layers that make up the Matplotlib architecture. -- **True**
+4. Using the notebook backend, you cannot modify a figure after it is rendered. -- **False (you cannot modify the figure using inline backend, but can modify the figure using the notebook backend)**
+5. Which of the following are examples of Matplotlib magic functions? -- ```%matplotlib inline``` and ```%matplotlib notebook```
+
+
+## Data Visualization with Python -- Week 2
+
+A **area plot** is also known as area chart or area graph, and it is commonly used to represent cumulated totals using numbers or percentages over time.
+
+![](images/VISUAL-02-AREA-PLOT.png)
+
+A **histogram** is a way of representing the frequency distribution of a variable.
+
+![](images/VISUAL-03-HISTOGRAM.png)
+
+A **bar chart** is commonly used to compare the values of a variable at a given point in time. 
+
+![](images/VISUAL-04-BAR-CHART.png)
+
+*Quiz*
+
+1. Area plots are stacked by default. -- **True**
+2. Which of the following codes uses the artist layer to create a stacked area plot of the data in the pandas dataframe, area_df? -- 
+    ```
+    ax = area_df.plot(kind='area', figsize=(20,10))
+    ax.set_title('xxx')
+    ax.set_ylabel('xxx')
+    ax.set_xlabel('xxx')
+    ```
+3. The following code will create an **unstacked** area plot of the data in the pandas dataframe, area_df, with a transparency value of 0.35? -- **False**
+    ```
+    import matplotlib.pyplot as plt
+    transparency = 0.35
+    area_df.plot(kind='area', alpha=transparency, figsize=(20,10))
+    plt.title('xxx')
+    plt.ylabel('xxx')
+    plt.xlabel('xxx')
+    plt.show()
+    ```
+4. Given a pandas series, series_data, which of the following will create a histogram of series_data and align the bin edges with the horizontal tick marks? --
+   ```
+   count, bin_edges = np.histogram(series_data)
+   series_data.plot(kind='hist', xticks=bin_edges)
+   ```
+5. Given a pandas dataframe, question, which of the following will create a horizontal bar chart of the data in question? -- ```question.plot(kind='barh')```
+
+A **pie chart** is a circular statistical graphic divided into slices to illustrate numerical proportion.
+
+![](images/VISUAL-05-PIE-CHART.png)
+
+> Most argue that pie charts fail to accurately display data with any consistency. Bar charts are much better when it comes to representing the data in a consistent way and getting the message across.
+
+A **box plot** is a way of statistically representing the distribution of given data through five main dimensions： median / first quartile / third quartile / minimum / maximum / (outliers).
+
+![](images/VISUAL-06-BOX-PLOT.png)
+
+A **scatter plot** is a type of plot that displays values pertaining to typically two variables against each other. Usually it is a dependent variable to be plotted against an independent variable in order to determine if any correlation between the two variables exists.
+
+![](images/VISUAL-07-SCATTER-PLOT.png)
+
+*Quiz*
+
+1. Pie chats are less confusing than bar charts and should be your first attempt when creating a visual. -- **False**
+2. What do the letters in the box plot above represent? -- **A = median; B = third quartile; C = first quartile; D = inner quartile range; E = minimum; F = Outliers**
+3. What is the correct combination of function and parameter to create a box plot in Matplotlib? -- **function = plot, parameter = kind, with value = 'box'**
+4. Which of the lines of code below will create the following scatter plot, given the pandas dataframe df_total? --
+    ```
+    import matplotlib.pyplot as plt
+    df_total.plot(kind='scatter', x='year', y='total')
+    plt.title('xxx')
+    plt.xlabel('xxx')
+    plt.ylabel('xxx')
+    plt.show()
+    ```
+5. A bubble plot is a variation of the scatter plot that displays one dimension of data. -- **False (actually 3 dimensions)**
+
+
+## Data Visualization with Python -- Week 3
+
+A **waffle chart** is an interesting visualization that is normally created to display progress towards goals.
+
+A **word cloud** is a depiction of the frequency of different words in some textual data. 
+
+Seaborn is a Python visualization library based on Matplotlib. And using Seaborn can effecively reduce the numbre of lines of code to create a plot, e.g. regression plot.
+
+![](images/VISUAL-08-REGRESSION-PLOT.png)
+
+*Quiz*
+
+1. Seaborn is a Python visualization library that provides a high-level interface for drawing attractive statistical graphics, such as regression plots and box plots. -- **True**
+2. The following code creates the following regression plot. -- **False (marker)**
+3. A regression plot is a great way to visualize data in relation to a whole, or to highlight progress against a given threshold. -- **False (waffle chart)**
+4. In Python, creating a waffle chart is straightforward since we can easily create one using the scripting layer of Matplotlib. -- **False**
+5. A word cloud -- **is a depiction of the frequency of different words in some textual data; is a depiction of the meaningful words in some textual data, where the more a specific word appears in the text, bigger and bolder it appears in the word cloud; can be generated in Python using the ```word_cloud``` package that was developed by Andreas Mueller**
+
+**Folium** is a powerful Python library that helps you create several types of Leaflet maps. It enables both the binding of data to a map for choropleth visualizations as well as passing visualizations as markers on the map.
+
+![](images/VISUAL-09-FOLIUM.png)
+![](images/VISUAL-10-FOLIUM.png)
+![](images/VISUAL-11-FOLIUM.png)
+
+A **choropleth map** is a thematic map in which areas are shaded or patterned in proportion to the measurement of the statistical varaible being displayed on the map, such as population density or per capita income. The higher the measurement the darker the color.
+
+![](images/VISUAL-12-CHOROPLETH-MAP.png)
+
+*Quiz*
+
+1. Stamen Terrain, Stamen Toner, and Mapbox Bright, are three tile styles of Folium maps. -- **True**
+2. Stamen Toner is the right tile style of Folium maps for visualizing and exploring river meanders and coastal zones of a given geographical area. -- **True**
+3. You cluster markers, superimposed onto a map in Folium, using a marker cluster object. -- **True**
+4. The following code will generate a map of Spain, displaying its hill shading and natural vegetation. ```folium.Map(location=[-40.4637,-3.7492], zoom_start=6, tiles='Stamen Toner')``` -- **False**
+5. In choropleth maps, the higher the measurement of the statistical variable being displayed on the map, the lighter the color. -- **False**
+
+
+## Machine Learning with Python -- Week 1
+
+**Machine Learning** is the subfield of computer science that gives computers the ability to learn without being explicitly programmed.
+
+Major machine learning techniques:
+* regression / estimation
+  * predicting continuous values
+* classification
+  * predicting the item class / category of a case
+* clustering
+  * finding the structure of data; summarization
+* associations
+  * associating frequent co-occurring items / events
+* anomaly detection
+  * discovering abnormal and unusual cases
+* sequence mining
+  * predicting next events; click-stream (Markov Model, HMM)
+* dimension reduction
+  * reducing the size of data
+* recommendation systems
+  * recommending items
+
+Difference between AI / ML / DL:
+* **Artificial Intelligence (or AI)** tries to make computers intelligent in order to minic the cognitive functions of humans. So it is a general field with a broad scope including: Computer Vision, Language Processing, Creativity, and Summarization.
+* **Machine Learning (or ML)** is the branch of AI that covers the statistical part of Artificial Intelligence, which teaches the computer to solve problems by looking at hundreds or thousands of examples, learning from them, and then using that experience to solve the same problem in new situations.
+* **Deep Learning (or DL)** is a very special field of Machine Learning where computers can actually learn and make intelligent decisions on their own. It involves a deeper level of automation in comparison with most machine learning algorithms.
+
+Python libraries for machine learning:  
+numpy / scipy / matplotlib / pandas / scikit-learn 
+
+More about scikit-learn:
+* free software machine learning library
+* classification, regression, clustering algorithms
+* works with numpy and scipy
+* great documentation
+* easy to implement  
+(data preprocessing -> train/test split -> algorithm setup -> model fitting -> prediction -> evaluation -> model export)
+
+```
+from sklearn import preprocessing
+X = preprocessing.StandardScaler().fit(X).transform(X)
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+from sklearn import svm
+clf = svm.SVC(gamma=0.001, C=100.)
+clf.fit(X_train, y_train)
+yhat = clf.predict(X_test)
+from sklearn.metrics import confusion_matrix
+print(confusion_matrix(y_test, yhat, labels[1,0]))
+import pickle
+s = pickle.dump(clf)
+```
+
+**Supervise** means to observe and direct the execution of a task, project or activity. Supervised learning has a more controlled environment, and it has more evaluation methods than unsupervised learning:
+
+* **Classification** is the process of predicting discrete class labels or categories.  
+* **Regression** is the process of predicting continuous values.
+
+**Unsupervised** models works on its won. Unsupervised learning has more difficult algorithms than supervised learning since we know little to no information about the data, or the outcomes that are to be expected:
+
+* **Clustering** is grouping of data points or objects that are somehow similar by: discovering structure / summarization / anomaly detection
+
+*Quiz*
+
+1. Supervised learning deals with unlabeled data, while unsupervised learning deals with labelled data. -- **False**
+2. Which of the following is not true about machine learning? -- **machine learning gives computers the ability to make decision by writing down rules and methods and being explicitly prgrammed.**
+3. Which of the following groups are not Machine Learning techniques? -- **numpy, scipy and scikit-learn**
+4. The regression technique in machine learning is a group of algorithms that are used for -- **predicting a continuous value; e.g. predicting the price of a house based on its characteristics**
+5. In constrast to supervised learning, unsupervised learning has more models and more evaluation methods that can be used in order to ensure the outcome of the model is accurate. -- **False**
+
+
+## Machine Learning with Python -- Week 2
+
+**Regression** is the process of predicting a continuous value. In regression, there are two types of variables, a dependent variable (y), and one or more independent variables (X). The key point in the regression is that our dependent variable should be continuous and cannot be a discrete value.
+
+Types of regression models:
+* simple regression
+  * simple linear regression
+  * simple non-linear regression
+* multiple regression
+  * multiple linear regression
+  * multiple non-linear regression
+
+### Linear Regression
+
+**Linear regression** model representation: $y = \theta_0 + \theta_1 x_1$  
+Pros of linear regression: very fast / no parameter tuning / easy to understand and highly interpretable
+
+* **Training accuracy**
+  * the percentage of correct predictions that the model makes when using the test dataset
+  * high training accuracy not necessarily a good thing
+  * result of overfitting (the model is overly trained to the dataset, which may capture noise and produce a non-generalized model)
+* **Out-of-sample accuracy**
+  * the percentage of correct predictions that the model makes on data that the model has not been trained on
+  * important that our models have a high out-of-sample accuracy
+
+Train / Test split evaluation approach:
+* test on a portion of training set
+  * high training accuracy
+  * low out-of-sample accuracy
+* train / test split
+  * mutually exclusive
+  * more accurate evaluation on out-of-sample accuracy
+  * highly dependent on which datasets the data is trained and tested
+
+**Evaluation metrics** are used to explain the performance of a model. In the context of regression, the **error** of a model is the difference between the data points and the trend line generated by the algorithm. The error types include **MAE (mean absolute error)**, **MSE (mean squared error)**, **RMSE (root mean squared error)**, **RAE (relative absolute error)**, and **RSE (relative squared error)**.
+
+### Multiple Linear Regression
+
+**Multiple linear regression** measures independent variables effectiveness on prediction, and also enables predicting impacts of changes.
+
+**Multiple linear regression** model representation: $y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n$, which can be simplified as $y = \theta^T x$.
+
+How to estimate $\theta$?
+* ordinary least squares
+  * linear algebra operations
+  * takes a long time for large datasets
+* an optimization algorithm
+  * gradient descent
+  * proper approach for large datasets
+
+### Polynomial Regression
+
+**Polynomial regression** fits a curve line to your data, e.g. $y = \theta_0 + \theta_1 x + \theta_2 x^2 + \theta_3 x^3$. A polynomial regression model can be transformed into a linear regression model.
+
+**Polynomial regression** models can fit using the model of least squares. Least squares iis a method of estimating the unknown parameters in a linear regression model by minimizing the sum of squares of the differences between the observed dependent variable in the given dataset and those predicted by the linear function.
+
+What is **non-linear** regression?
+* to model non-linear relationship between the dependent variable and a set of independent variables
+* $y$ must be a non-linear function of the parameters $\theta$, not necessarily the features $X$.
+
+*Quiz*
+
+1. Multiple Linear Regression is appropriate for -- **predicting tomorrow's rainfall amount based on the wind speed and temperature**
+2. Which of the following is the meaning of "out-of-sample accuracy" in the context of evaluation of models? -- **"out-of-sample accuracy" is the percentage of correct predictions that the model makes on data that the model has NOT been trained on**
+3. When should we use Multiple Linear Regression? -- **when we would like to identify the strength of the effect that the independent variables have on a dependent variable; when we would like to predict impacts of changes in independent variables on a dependent variable**
+4. Which of the following statements are TRUE about Polynomial Regression? -- **polynomial regression fits a curve line to your data**
+5. Which sentence is NOT TRUE about non-linear regression? -- **non-linear regression must have more than one dependent variable**
+
+
+## Machine Learning with Python -- Week 3
+
+**Classification**, as a supervised learning approach, means categorizing some unknown items into a discrete set of categories or "classes". The target attribute is a categorical variable. **Classification** determines the class label for an unlabelled test case. 
+
+A multi-class classifier is a classifier that can predict a field with multiple discrete values, such as "DrugA", "DrugX", or "DrugY".
+
+Classification algorithms in machine learning: decision trees (ID3, C4.5, C5.0) / Naive Bayes / Linear Discriminant Analysis / K-Nearest Neighbours / Logistic Regression / Neural Networks / Support Vector Machines (SVM)
+
+### K-Nearest Neighbours
+
+Given the dataset with predefined labels, we need to build a model to be used to predict the class of a new or unknown case. The **K-Nearest Neighbours** algorithm is a classification algorithm that takes a bunch of labeled points and uses them to learn how to label other points.
+* a method for classifying cases based on their similarity to other cases
+* cases that are near each other are said to be neighbours
+* based on similar cases with same class labels are near each other
+
+The **K-Nearest Neighbours** algorithm:
+1. pick a value for K
+2. calculate the distance of unknown case from all cases
+3. select the K-observations in the training data that are "nearest" to the unknown data point
+4. predict the response of the unknown data point using the most popular response value from the K-nearest neighbours
+
+Calculating the similarity / distance in a multi-dimensional space: $dis(X1,X2) = \sqrt{(54-50)^2 + (190-200)^2 + (3-8)^2} = 11.87$
+
+Determining the best value of K for KNN: 
+* a low value of K causes results capturing the noise or anomaly in data 
+* a low value of K causes a highly complex model, resulting in overfitting
+* a high value of K causes overly generalization
+* the general solution is to reserve a part of your data for testing the accuracy of the model, to choose K equals one, to use the training part for modelling, to calculate the accuracy of prediction, to repeat the proess increasing the K, and to determine the K which gives the best accuracy
+
+Evaluation metrics provide a key role in the development of a model, as they provide insights into areas that might require improvement.
+* Jaccard index (ideal to be 1)
+* F1-score (ideal to be 1)
+* Log loss (ideal to be 0)
+
+![](images/METRIC-01-J-INDEX.png)
+![](images/METRIC-02-F1-SCORE.png)
+![](images/METRIC-03-LOG-LOSS.png)
+
+### Decision Trees
+
+The basic intuition behind a **decision tree** is to map out all possible deicision paths in the form of a tree. **Decision trees** are built by splitting the training set into distinct nodes. One node in a Decision Tree contains all of or most of, one category of the data.
+
+**Decision Trees** learning algorithm:
+1. choose an attribute from your dataset
+2. calculate the significance of attribute in splitting of data
+3. split data based on the value of the best attribute
+4. go to step 1
+
+**Decision Trees** are built using recursive partitioning to classify the data. 
+
+Which attribute is the best? **more predictiveness, less impurity, lower entropy**.  
+*Impurity* of nodes is calcualted by entropy of data in the node.  
+*Entropy* is a measure of randomness or uncertainty.  
+The lower the entropy, the less uniform the distribution, the purer the node.  
+$entropy = p(A)*log(p(A)) - p(B)*log(p(B))$.  
+The attribute is determined best to make the tree with the higher **Information Gain** after splitting.  
+*Information Gain* is the information that can increase the level of uncertainty after splitting.  
+$informationGain = (entropyBeforeSplit) - (weightedEntropyAfterSplit)$
+
+### Logistic Regression
+
+**Logistic Regression** is a classification algorithm for categorical variables (for both binary classificaiton or multi-class classification). Some applications include:
+* predicting the probability of a person having a heart attack
+* predicting the mortality in injured patients
+* predicting a customer's propensity to purchase a product or halt a subcription
+* predicting the probability of failure of a given process or product
+* predicting the likelihood of a homeowner defaulting on a mortage
+
+When **logistic regression** is suitable?
+* if the data is binary
+* if probabilistic results are needed
+* if you need a linear decision boundary
+* if you need to understand the feature impact
+
+> Linear regression cannot properly measure the probability of a case belonging to a class
+
+![](images/CLAS-01-LOGISTIC.png)
+
+What is the output of **logistic regression** model?
+* P(y=1|X)
+* P(y=0|X) = 1 - P(y=1|X)
+
+The **logistic regression** cost function:  
+$cost(y', y) = -log(y')$ if $y = 1$  
+$cost(y', y) = -log(1-y')$ if $y = 0$  
+$J(\theta) = \frac{1}{m}\sum_{i-1}^{m} y^ilog(y'^i) + (1-y^i)log(1-y'^i)$
+
+How to find the best parameters for the model? -- minimize the cost function  
+How to minimize the cost function? -- using gradient descent  
+
+**Gradient Descent** is a technique to use the derivate of a cost function to change the parameter values, in order to minimize the cost.
+
+![](images/CLAS-02-GRADIENT.png)
+
+The **logistic regression** training process:
+1. initialize the parameters randomly
+2. feed the cost function with training set, and calculate the error
+3. calculate the gradient of cost function
+4. update weights with new values
+5. go to step 2 until cost is small enough
+
+### Support Vector Machine (SVM)
+
+**Support Vector Machine (or SVM)** is a supervised algorithm that classifies cases by finding a separator.
+* mapping data to a high-dimensional feature space
+* finding a separator
+
+The SVM algorithm outputs an optimal hyperplane that categorizes new examples.
+
+**Kernelling**, such as linear, polynomial, RBF, and sigmoid, maps data into a higher dimensional space, in such a way that can change a linearly inseparable dataset into a linearly spearable dataset.
+
+![](images/METRIC-04-SVM.png)
+
+* Advantages of SVM:
+  * accurate in high-dimensional spaces
+  * memory efficient
+* Disadvantages of SVM:
+  * prone to overfitting
+  * no probability estimation
+  * suitable for small datasets
+
+*Quiz*
+
+1. Which one is NOT a sample of classification problem? -- to predict the amound of money a customer will spend in one year
+2. Which of the following statements are TRUE about Logisic Regression? -- logistic regression can be used for both binary classification and multi-class classification; logistic regression is analogous to linear regression but takes a categorical / discrete target field instead of a numeric one
+3. Which of the following examples are sample applications of Logistic Regression? -- the probability that a person has a heart attack within a specified time period using person's age and sex; likelihood of a homeowner defaulting on a mortgage
+4. Which one is TRUE about the kNN algorithm? -- kNN algorithm can be used to estimate values for a continuous target
+5. What is information gain in decision trees? -- it is the entropy of a tree before split minus weighted entropy after splity by an attribute
+
+
+## Machine Learning with Python -- Week 4
+
+**Clustering** can group data only unsupervised, based on the similarity of customers to each other. A **cluster** is a group of objects that are similar to other objects in the cluster, and dissimilar to data points in other clusters.
+* *Classification* algorithms predict categorical classed labels and classification is a supervised learning where each training data instance belongs to a particular class
+* In *Clustering*, the data is unlabelled and the process is unsupervised
+
+Clustering applications include:
+* retail / marketing
+  * identifying buying pattern of customers
+  * recommending new books or movies to new customers
+* banking
+  * fraud detection in credit card use
+  * identifying clusters of customers
+* insurance
+  * fraud detection in claims analysis
+  * insurance risk of customers
+* publication
+  * auto-categorizing news based on their content
+  * recommending similar new articles
+* medicine
+  * characterizing patient behaviour
+* biology
+  * clustering genetic markers to identify family ties
+
+Clustering can be used for one of the following purposes:
+* exploratory data analysis
+* summary generation
+* outlier detection
+* finding duplicates
+* pre-processing step
+
+### K-Means
+
+**K-Means** can group data only unsupervised based on similarity of customers to each other. **K-Means**, as a type of partitioning clustering, divides the data into non-overlapping subsets (clusters) without any cluster-internal structure. 
+* examples within a cluster are very similar
+* examples across different clusters are very different
+
+How to determine the similarity or dissimilarity? the *distance* of samples from each other is used to shape the clusters. So, **K-Means** tries minimize the intra-cluster distances and maximize the inter-cluster distances.
+
+**K-Means** clustering algorithm:
+1. randomly placing *K* centroids, one for each cluster
+2. calculate the distance of each point from each centroid
+3. assign each data point (object) to its closest centroid, creating a cluster
+4. re-calculate the position of the *K* centroids
+5. repeat the steps 2-4, until the centroids no longer move
+
+To measure K-Means accuracy:
+* external approach
+  * compare the clusters with the ground truth, if available
+* internal approach
+  * average the distance between data points within a cluster
+
+Increasing the number of clusters equal to reducing the distance of centroids to data points. This means increasing K will always decrease the error. The elbow point is determined where the rate of decrease sharply shifts, and this point should be the value for K for clustering.
+
+![](images/elbow-rule.png)
+
+### Hierarchical Clustering
+
+**Hierarchical Clustering** algorithms build a hierarchy of clusters where each node is a cluster consists of the clusters of its daughter nodes. Strategies for hierarchical clustering generally fall into two types, *divisive* and *agglomerative*.
+* *divisive* (top-down): you start with all observations in a large cluster and break it down into smaller pieces
+* *agglomerative* (bottom-up): each observation starts in its own cluster and pairs of clusters are merged together as moving up the hierarchy
+
+Essentially, **hierarchical clustering** does not require a pre-specified number of clusters. Agglomerative algorithm is more popular than divisive algorithm.
+
+Agglomerative algorithm:
+1. create *n* clusters, one for each data point
+2. compute the proximity matrix
+3. repeat
+   1. merge the two closest clusters
+   2. update the proximity matrix
+4. until only a single cluster remains
+
+Distance between clusters
+* single-linkage clustering
+  * minimum distance between clusters
+* complete-linkage clustering
+  * maximum distance between clusters
+* average linkage clustering
+  * average distance between clusters
+* centroid linkage clustering
+  * distance between cluster centroids
+
+Advantages of **hierarchical clustering**:
+* not require number of clusters to be specified
+* easy to implement
+* producing a dendrogram that helps understanding the data
+
+Disadvantages of **hierarchical clustering**:
+* unable to undo any previous steps throughout the algorithm
+* generally has long runtimes
+* sometimes difficult to identify the number of clusters by the dendrogram
+
+**Hierarchical Clustering** vs **K-Means**:
+* hierarchical clustering
+  * can be slow for large datasets
+  * not require the number of clusters to run
+  * gives more than one partitioning depending on the resolution
+  * always generates the same clusters
+* K-Means
+  * much more efficient
+  * requires the number of clusters to be specified
+  * gives only one partitioning of the data based on the predefined number of clusters
+  * potentially returns different clusters each time due to random initialization of centroids
+
+### Density-based Clustering
+
+The **density-based clustering** algorithm is appropriate to use thn examining spatial data, especially proper for arbitrary shape clusters.
+
+**Density-based clustering** vs **K-Mneas**:
+* Density-based clustering locates regions of high density, and separate outliers
+* K-Means assigns all points to a cluster even if they do not belong in any
+
+A specific and very popular type of density-based clustering is **DBSCAN**. **DBSCAN** is particularly effective for tasks like class identification on a spatial context.
+
+**DBSCAN** stands for Density-Based Spatial Clustering of Applications with Noise. It is one of the most common clustering algorithms, and it works based on density of objects. It has two parameters: R and M:
+* R (radius of neighbourhood)
+  * radius that if includes enough number of points within, we call it a dense area
+* M (min number of neighbours)
+  * minimum number of data points we want in a neighbourhood to define a cluster
+
+![](images/DBSCAN.png)
+
+Advantage of **DBSCAN**:
+* arbitrarily shaped clusters
+* robust to outliers
+* not require specification of the number of clusters
+
+*Quiz*
+
+1. Which statement is NOT TRUE about K-Means clustering? -- **as K-Means is an iterative algorithm, it guarantees that it will always converge to the global optimum**
+2. Which of the following are characteristics of DBSCAN? -- **DBSCAN can find arbitrarily shaped clusters; DBSCAN has a notion of noise, and is robust to outliers; DBSCAN does not require one to specify the number of clusters such as K in K-Means**
+3. Which of the following is an application of clustering? -- **customer segmentation**
+4. Which approach can be used to calculate dissimilarity of objects in clustering? -- **minkowski distance; euclidian distance; cosine similarity**
+5. How is a center point (centroid) picked for each cluster in K-Means? -- **we can randomly choose some observations out of the data set and use these observations as the initial means**
+
+
+## Machine Learning with Python -- Week 5
+
+Recommender systems capture the pattern of people's behaviour and use it to predict what else they might want or like. The benefits are as follows.
+* broader exposure
+* possibility of continual usage or purchase of products
+* provides better experience
+
+Implementing recommender systems
+* memory-based
+  * uses the entire user-item dataset to generate a recommendation
+  * uses statistical techniques to approximate users or items
+* model-based
+  * develops a model of users in an attempt to learn their preferences
+  * models can be created using ML techniques like regression, clustering, classification, etc
+
+### Content-based Recommender
+
+A content-based recommendation system tries to recommend items to users based on their profile. The user's profile revolves around that user's preferences and tastes. The recommendation process is based on the similarity between those items. Similarity or closeness of items is measured based on the similarity in the content of those items.
+
+### Collaborative Filtering
+
+**Collaborative Filtering** is based on the fact that relationships exist between products and people's interests. Many recommendation systems use collaborative filtering to find these relationships and to give an accurate recommendation of a product that the user might like or be interested in.
+
+* User-based collaborative filtering
+  * based on user's neighbourhood
+* Item-based collaborative filtering
+  * based on item's similarity
+
+weighted_ratings_matrix = ratings_matrix_subset * similarity_matrix  
+recommendation_matrix = sum_similarity_index + sum_rating_and_weight_matrix
+
+Challenges of **Collaborative Filtering**:
+* data sparsity:
+  * users in general rate only a limited number of items
+* cold start
+  * difficulty in recommendation to new users or new items
+* scalability
+  * increase in number of users or items
+
+*Quiz*
+
+1. Which are the advantages of Recommender Systems? -- **recommender systems provide a better experience for the users by giving them a broader exposure to many different products they might be interested in; recommender systems encourage users towards continual usage or purchase of their product; recommender systems benefit the service provider by increasing potential revenue and better security for its customers**
+2. What is a content-based recommendation system? -- **content-based recommendation system tries to recommend items to the users based on their profile built upon their preferences and taste**
+3. What is the meaning of cold start in collaborative filtering? -- **the difficulty in recommendation when we have new user, and we cannot make a profile for him, or when we have a new item, which has not got any rating yet**
+4. What is a memory-based recommender system? -- **we use the entire user-item dataset to generate a recommendation system**
+5. What is the shortcoming of content-based recommender system? -- **users will only get recommendations related to their preferences in their profile, and recommender engine may never recommend any item with other characteristics**
+
+
+## Applied Data Science Capstone -- Week 1
+
+This capstone project hopefully equips you with the necessary skills to have the opportunity to be creative and come up with your own idea or problem to solve using location data. E.g. you can choose to compare different neighborhoods in terms of a service, search for potential explanation of why a neighborhood is popular, the cause of complaints in another neighborhood, or anything else related to neighborhoods. Hence the name of the capstone will be the **Battle of the Neighborhoods**.
+
+**Location data** is data describing places and venues, such as their geographical location, their category, working hours, full address, etc, such that for a given location given in form of its geographical coordinates one is able to determine what types of venues exist within a defined radius from that location.
+
+Features of location data providers (Foursquare / Google / Yelp):
+* rate limits
+* cost
+* coverage
+* accuracy
+* update frequency
+
+
+## Applied Data Science Capstone -- Week 2
+
+Foursquare is a technology company that built a massive dataset of accurate location data. Foursquare powers location data for Apple Maps, Uber, Snapchat, Twitter, and many others. Their API and location data are currently being used by over 100,000 developers.
+
+You communicate with the database via groups and endpoints in the form of a Uniform Resource Identifier (URI). Every time you make a call request, you have to pass your developer account credentials, which are your Client ID and Client Secret as well as what is called the verion of the API (simply a date).
+
+Venues Data: Name / Unique ID / Category / Location
+
+User Data: First name / Last name / Gender / ID / Contact / Friends / Tips
+
+Using the Foursquare API, we can
+* search for a specific type of venue around a given location - Regular
+* learn more about a specific venue - Premium
+* learn more about a specific Foursquare user - Regular
+* explore a given location - Regular
+* explore trending venues around a given location - Regular
+
+*Quiz*
+
+1. The explore endpoint is used to search for venues in the vicinity of a particular location. -- **False (the search endpoint is the appropriate endpoint to use)**
+2. Which of the following parameters need to be passed every time you make a call to the Foursquare API? -- **your client secret; your client ID; the version of API**
+3. Using a personal (free) developer account, you can make 500 permium calls per day. -- **True**
+4. Using a personal (free) developer account, how many tips and photos can you access per venue? -- **1 tip and 1 photo**
+5. Which of the following (information, call type) pairs are correct? -- **venue details, premium**
+
+
+## Applied Data Science Capstone -- Week 3
+
+Customer segmentation is the practice of partitioning a customer base into groups of individuals that have similar characteristics. One of the algorithms that can be used for customer segmentation is **K-Means** clustering.
+
+**K-Means** is a type of partitioning clustering. It divides the data into non-overlapping subsets (clusters) without any cluster-internal structure. Examples within a cluster are very similar but examples across different clusters are very different.
+
+
